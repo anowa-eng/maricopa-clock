@@ -2,7 +2,9 @@ const fs = require("fs");
 const os = require("os");
 const math = require("mathjs");
 
-export default function schedule() {
+module.exports = function schedule(timeRangesAsStrings=false) {
+    const asResult = (time) => timeRangesAsStrings ? time.toLocaleTimeString() : time;
+
     const blockSchedule = fs.readFileSync(os.homedir() + "/.maricopa/config/schedule.csv").toString();
     /**
      * @type {[string, Date, Date, number][]}
@@ -22,7 +24,7 @@ export default function schedule() {
             return [_name, start, end, beats];
         });
 
-    const beatSchedule = [];
+    const beatSchedule = {};
     for (const block of blocks) {
         const [name, blockStart, blockEnd, beats] = block;
         let start = blockStart.getTime();
@@ -32,7 +34,8 @@ export default function schedule() {
 
         let beatList = [];
         let secondToLastBeatEnd;
-        for (let i = start, j = math.add(start, beatLength); j <= end; i = math.add(i, math.add(beatLength, 1)), j = math.add(j, math.add(beatLength, 1))) {
+    
+        for (let i = start, j = math.add(start, beatLength - 1); j <= end; i = math.add(i, beatLength), j = math.add(j, beatLength)) {
             beatList.push([i, j]);
             secondToLastBeatEnd = j;
         }
@@ -41,16 +44,13 @@ export default function schedule() {
             b.map((time) => {
                 let date = new Date();
                 date.setTime(time);
-                return date;
+                return asResult(date);
             }));
         beatSchedule[name] = {
-            timeRange: [blockStart, blockEnd],
+            timeRange: [asResult(blockStart), asResult(blockEnd)],
             beats: beatList
         };
     }
 
     return beatSchedule;
 }
-
-// Print out the schedule
-console.log(schedule());
