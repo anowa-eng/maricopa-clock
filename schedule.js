@@ -2,7 +2,7 @@ const fs = require("fs");
 const os = require("os");
 const math = require("mathjs");
 
-module.exports = function schedule() {
+export default function schedule() {
     const blockSchedule = fs.readFileSync(os.homedir() + "/.maricopa/config/schedule.csv").toString();
     /**
      * @type {[string, Date, Date, number][]}
@@ -51,3 +51,6 @@ module.exports = function schedule() {
 
     return beatSchedule;
 }
+
+// Print out the schedule
+console.log(schedule());

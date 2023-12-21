@@ -1,3 +1,13 @@
-const schedule = require('./schedule/schedule');
+const { app, BrowserWindow } = require("electron");
+console.log(app)
 
-console.log(schedule());
+const createWindow = () => {
+    let window = new BrowserWindow({
+        width: 500,
+        height: 500
+    });
+
+    window.loadFile("index.html");
+}
+
+app.whenReady().then(() => createWindow());
