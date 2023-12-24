@@ -35,7 +35,7 @@ module.exports = function schedule(timeRangesAsStrings=false) {
         let beatList = [];
         let secondToLastBeatEnd;
     
-        for (let i = start, j = math.add(start, beatLength - 1); j <= end; i = math.add(i, beatLength), j = math.add(j, beatLength)) {
+        for (let i = start, j = math.add(start, beatLength - 1); j < end; i = math.add(i, beatLength), j = math.add(j, beatLength)) {
             beatList.push([i, j]);
             secondToLastBeatEnd = j;
         }

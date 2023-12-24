@@ -4,10 +4,7 @@ console.log(app)
 const createWindow = () => {
     let window = new BrowserWindow({
         width: 500,
-        height: 500,
-        webPreferences: {
-            preload: __dirname + "/preload.js"
-        }
+        height: 500
     });
 
     window.loadFile("index.html");
